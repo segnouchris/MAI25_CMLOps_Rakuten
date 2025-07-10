@@ -1,7 +1,36 @@
-Project Name
+MAI25_CMLOPS : project Rakuten 
 ==============================
 
-This project is a starting Pack for MLOps projects based on the subject "movie_recommandation". It's not perfect so feel free to make some modifications on it.
+# To load raw data set
+```bash
+python -m src.data.import_raw_data
+```
+
+# To make dataset for training
+```bash
+python -m src.data.make_dataset
+```
+
+# To launch unit tests
+```bash
+python -m pytest
+```
+
+# To launcher docker api specifically (it avoids the training phase of docker-compose pipeline)
+docker build -f docker/Dockerfile.api -t predict_api .
+docker run -p 8000:8000 -v ${PWD}/models:/app/models \
+    -v ${PWD}/data/processed:/app/data/processed \
+    predict_api:latest
+
+# To launch the docker compose pipeline
+docker compose up --build
+
+
+# To launche the dvc pipeline
+dvc repro
+
+# Structure of repository
+This project is a MLOps projects based on the ENS Data challenge Rakuten. The problem raised by the challenge is a multi modal classification based on texts and images.
 
 Project Organization
 ------------
@@ -48,7 +77,21 @@ Project Organization
     │   └── config         <- Describe the parameters used in train_model.py and predict_model.py
 
 --------
+You need to define a ` ./.env` file including the following environment variables :
+- `ENSDATA_LOGIN`: your login to your challengedataens account
+- `ENSDATA_PASSWORD`: your password to your challengedataens account
+Your account must subscribed to the challenge https://challengedata.ens.fr/participants/challenges/35/ 
 
+<br>The following environnement must be also defined (default values are provided):
+```
+DATA_RAW_DIR="./data/raw"                           # The path to the directory where the data is stored
+DATA_RAW_IMAGES_TRAIN_DIR="./data/raw/image_train"  # The path to the directory where the the images of train dataset are stored
+DATA_RAW_IMAGES_TEST_DIR="./data/raw/image_test"    # The path to the directory where the the images of test dataset are stored
+DATA_PROCESSED_DIR="./data/processed"               # The path to the directory where the processed data will be stored
+MODEL_DIR="./models"                                # The path to the directory where the model will be stored
+LOGS_DIR="./logs"                                   # The path to the directory where the logs will be stored
+```
+--------
 Once you have downloaded the github repo, open the anaconda powershell on the root of the project and follow those instructions :
 
 > `conda create -n "Rakuten-project"`    <- It will create your conda environement

@@ -25,6 +25,7 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
+.env 
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -79,7 +80,7 @@ target/
 .ipynb_checkpoints/
 
 # exclude data from source control by default
-/data/
+!data/**/*.dvc
 
 # Mac OS-specific storage files
 .DS_Store
@@ -95,4 +96,15 @@ target/
 /logs/
 
 # Artifacts
-# /models/
+/models/
+/data/raw/
+
+./.dvc/config.local
+/models
+!models/*.dvc
+/metrics
+
+/airflow/logs/
+/airflow/plugins/
+/airflow/dags/__pycache__/
+/airflow/dags/.airflowignore
